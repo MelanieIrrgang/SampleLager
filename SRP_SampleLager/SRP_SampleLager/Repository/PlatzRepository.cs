@@ -22,15 +22,15 @@ namespace SRP_SampleLager
         public void Update(IPlatzModel viewModel)
         {
             DBAccess.openDB();
-            //
+            dbUpdate(viewModel);
             DBAccess.closeDB();
         }
-
         public void Delete(IPlatzModel viewModel)
         {
-            throw new NotImplementedException();
+            DBAccess.openDB();
+            dbDelete(viewModel);
+            DBAccess.closeDB();
         }
-
         public void findById(IPlatzModel viewModel)
         {
             DBAccess.openDB();
@@ -190,7 +190,7 @@ namespace SRP_SampleLager
             }
             return rw;
         }
-        public static bool dbUpdate(int id, int anzahl)
+        public static bool dbUpdate(IPlatzModel viewModel)
         {
             bool rw = false;
 
@@ -199,10 +199,86 @@ namespace SRP_SampleLager
             SqlTransaction transaction = null;
 
             String sSql = "UPDATE [ASRP_TMS].[dbo].[lagerplatz] " +
-                          "SET Menge=" + anzahl + " " +
-                          "WHERE PK_Lagerplatz = " +
-                          "(SELECT FK_Lager FROM [ASRP_TMS].[dbo].[muster_lager] " +
-                          "WHERE PK_Muster_Lager=" + id + ")";
+                          "SET Platz=" + viewModel.PlatzName + " " +
+                          "WHERE PK_Lagerplatz=" + viewModel.id;
+
+            try
+            {
+                connection = DBAccess.mSqlCon;
+                if (connection.State != ConnectionState.Open)
+                    connection.Open();
+
+                transaction = connection.BeginTransaction();
+
+                cmd = connection.CreateCommand();
+
+                cmd.Transaction = transaction;
+                cmd.CommandText = sSql;
+                cmd.ExecuteNonQuery();
+
+                transaction.Commit();
+
+                rw = true;
+            }
+
+            //MySQL exception
+            catch (SqlException ex)
+            {
+                try
+                {
+                    transaction.Rollback();
+                }
+                catch (SqlException ex2)
+                {
+                    if (transaction.Connection != null)
+                    {
+                        MessageBox.Show(ex2.Message, ex2.GetType().ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+
+                MessageBox.Show(ex.Message, ex.GetType().ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            //other exception
+            catch (Exception e)
+            {
+                try
+                {
+                    transaction.Rollback();
+                }
+                catch (SqlException ex)
+                {
+                    if (transaction.Connection != null)
+                    {
+                        MessageBox.Show(ex.Message, ex.GetType().ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+
+                MessageBox.Show(e.Message, e.GetType().ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                //cleaning!
+                transaction.Dispose();
+                cmd.Dispose();
+
+                if (connection.State != System.Data.ConnectionState.Closed)
+                    connection.Close();
+            }
+
+            return rw;
+        }
+        public static bool dbDelete(IPlatzModel viewModel)
+        {
+            bool rw = false;
+
+            SqlConnection connection = null;
+            SqlCommand cmd = null;
+            SqlTransaction transaction = null;
+
+            String sSql = "UPDATE [ASRP_TMS].[dbo].[lagerplatz] " +
+                          "SET Gesperrt=1 " +
+                          "WHERE PK_Lagerplatz=" + viewModel.id;
 
             try
             {

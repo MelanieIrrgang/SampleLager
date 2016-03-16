@@ -57,12 +57,21 @@ namespace SRP_SampleLager
         }
         private void add()
         {
+            // add a 'Platz' which already exists
             if (this.id != -1)
             {
                 MessageBox.Show("Dieser Platz besteht bereits.", "Platz hinzufügen", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
+            // before you can add a new 'Platz' check if this 'Ort' is empty
+            if (this.PlatzList[0].PlatzName == "kein Platz zugewiesen")
+            {
+                this.id = this.PlatzList[0].id;
+                this._repository.Delete(this);
+            }
+
+            // insert new 'Platz' in database and clear view
             this._repository.Insert(this);
             this.PlatzList = new ObservableCollection<IPlatz>();
             this._repository.Select(this);
@@ -85,11 +94,28 @@ namespace SRP_SampleLager
             this.clear();
         }
         private void delete()
-        { }
+        {
+            if (this.id == -1)
+            {
+                MessageBox.Show("Sie können keinen Platz löschen, der nicht existiert", "Platz löschen", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            this._repository.Delete(this);
+            this.PlatzList = new ObservableCollection<IPlatz>();
+            this._repository.Select(this);
+            this.clear();
+
+            if(this.PlatzList.Count == 0)
+            {
+                this.PlatzName = "kein Platz zugewiesen";
+                this.add();
+            }
+        }
         private void select(object param)
         {
             int index = 0;
-            if (param == null || int.Parse(param.ToString()) == -1)
+            if (param == null || int.Parse(param.ToString()) == -1 || this.PlatzList[int.Parse(param.ToString())].PlatzName == "kein Platz zugewiesen")
                 return;
             else index = int.Parse(param.ToString());
 
