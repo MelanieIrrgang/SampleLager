@@ -36,6 +36,11 @@ namespace SRP_SampleLager
         {
             get { return this._EditCommand ?? (this._EditCommand = new RelayCommand(x => this.edit())); }
         }
+        private ICommand _DeleteCommand;
+        public ICommand DeleteCommand
+        {
+            get { return this._DeleteCommand ?? (this._DeleteCommand = new RelayCommand(x => this.delete())); }
+        }
         private ICommand _SelectCommand;
         public ICommand SelectCommand
         {
@@ -79,6 +84,8 @@ namespace SRP_SampleLager
             this._repository.Select(this);
             this.clear();
         }
+        private void delete()
+        { }
         private void select(object param)
         {
             int index = 0;

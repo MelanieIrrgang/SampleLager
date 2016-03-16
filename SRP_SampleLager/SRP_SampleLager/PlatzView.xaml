@@ -30,7 +30,8 @@
         
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Style="{DynamicResource StackPanelStyle}">
             <Button Content="Schließen" Style="{StaticResource ButtonStyle}"/>
-            <Button Content="Löschen" Style="{StaticResource ButtonStyle}"/>
+            <Button Content="Löschen" Style="{StaticResource ButtonStyle}"
+                    Command="{Binding DeleteCommand}"/>
             <Button Content="Ändernungen speichern" Style="{StaticResource ButtonStyle}" Width="140"
                     Command="{Binding EditCommand}"/>
             <Button Content="Hinzufügen" Style="{StaticResource ButtonStyle}" Command="{Binding AddCommand}"/>

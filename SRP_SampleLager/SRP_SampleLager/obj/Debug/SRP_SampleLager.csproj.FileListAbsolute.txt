@@ -94,3 +94,6 @@ C:\Users\irrgangm\Documents\Visual Studio 2013\Projects\SampleLager\SRP_SampleLa
 C:\Users\irrgangm\Documents\Visual Studio 2013\Projects\SampleLager\SRP_SampleLager\SRP_SampleLager\obj\Debug\SRP_SampleLager.g.resources
 C:\Users\irrgangm\Documents\Visual Studio 2013\Projects\SampleLager\SRP_SampleLager\SRP_SampleLager\obj\Debug\SRP_SampleLager.Properties.Resources.resources
 C:\Users\irrgangm\Documents\Visual Studio 2013\Projects\SampleLager\SRP_SampleLager\SRP_SampleLager\obj\Debug\SRP_SampleLager.csproj.GenerateResource.Cache
+C:\Users\irrgangm\SampleLager\SRP_SampleLager\SRP_SampleLager\bin\Debug\SRP_SampleLager.exe.config
+C:\Users\irrgangm\SampleLager\SRP_SampleLager\SRP_SampleLager\obj\Debug\SRP_SampleLager.exe
+C:\Users\irrgangm\SampleLager\SRP_SampleLager\SRP_SampleLager\obj\Debug\SRP_SampleLager.pdb
